@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizador de 1 Minuto con Alerta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        #frame-arriba {
+            height: 100px;
+            border-bottom: 2px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+            flex-direction: column;
+        }
+        #frame-abajo {
+            height: calc(100vh - 100px);
+            width: 100%;
+            border: none;
+        }
+        #temporizador {
+            font-size: 2rem;
+            color: #333;
+        }
+        #alerta {
+            font-size: 1.2rem;
+            color: red;
+            margin-top: 10px;
+            display: none; /* Oculto inicialmente */
+        }
+    </style>
+</head>
+<body>
+    <!-- Frame de arriba: Temporizador y mensaje de alerta -->
+    <div id="frame-arriba">
+        <div id="temporizador">01:00</div>
+        <div id="alerta">Envie el formulario, antes de que termine el tiempo de lo contrario se perdera!</div>
+    </div>
+
+    <!-- Frame de abajo: Enlace -->
+    <iframe id="frame-abajo" src="https://docs.google.com/forms/d/e/1FAIpQLSfPowdU_mikGBnCax6pFeM_WrErCN9v2T5AP9l4KQx8DoIFgQ/viewform"></iframe>
+
+    <script>
+        let tiempo = 60; // 1 minuto en segundos
+        const temporizadorElemento = document.getElementById('temporizador');
+        const frameAbajo = document.getElementById('frame-abajo');
+        const alertaElemento = document.getElementById('alerta');
+
+        function actualizarTemporizador() {
+            const minutos = Math.floor(tiempo / 60); // Calcular minutos
+            const segundos = tiempo % 60; // Calcular segundos
+            // Formatear el tiempo como MM:SS
+            temporizadorElemento.textContent = `${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+
+            // Mostrar alerta cuando queden 10 segundos
+            if (tiempo === 10) {
+                alertaElemento.style.display = "block"; // Mostrar el mensaje de alerta
+            }
+
+            if (tiempo > 0) {
+                tiempo--; // Decrementar el tiempo
+                setTimeout(actualizarTemporizador, 1000); // Esperar 1 segundo
+            } else {
+                temporizadorElemento.textContent = "Terminado";
+                frameAbajo.remove(); // Cerrar el frame de abajo
+            }
+        }
+
+        // Iniciar el temporizador
+        actualizarTemporizador();
+    </script>
+</body>
+</html>
